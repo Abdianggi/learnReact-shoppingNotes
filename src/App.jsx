@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import './App.css'
+// import './App.css'
+import clsx from 'clsx';
 const groceryItems = [
   {
     id: 1,
@@ -55,7 +56,7 @@ function Form({onAddItem}){
 
   return (
     <form className="my-5" onSubmit={handleSubmit}>
-      <h3>Hari ini belanja apa kita?</h3>
+      <h3>What we buy today?</h3>
       <div>
         <select className={darkStyle} value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}>
           {quantityNum}
@@ -70,7 +71,7 @@ function Form({onAddItem}){
 function Option(){
   return (
     <div className="mb-5">
-      <select className='bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'>
+      <select className='bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-max p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'>
         <option value="input">Urutkan berdasarkan urutan input</option>
         <option value="name">Urutkan berdasarkan nama barang</option>
         <option value="checked">Urutkan berdasarkan ceklis</option>
@@ -80,22 +81,25 @@ function Option(){
   )
 }
 
-function Item({item}){
+function Item({item, onDeleteItem, onThroughItem}){
   return (
-    <li key={item.id} className={item.checked ? 'line-through' : ''}>
-      <input type="checkbox" className='me-3'/>
+    <li key={item.id} className={clsx(
+      item.checked ? 'line-through' : '',
+      'mx-'
+    )}>
+      <input type="checkbox" className='me-3' onChange={() => onThroughItem(item.id)} checked={item.checked} />
       <span className='me-3'>{item.quantity} {item.name}</span>
-      <button className='bg-red-700 rounded p-1 hover:bg-red-500'>&times;</button>
+      <button className='bg-red-700 rounded p-1 hover:bg-red-500' onClick={() => onDeleteItem(item.id)} >&times;</button>
     </li>
   )
 }
 
-function List({items}){
+function List({items, onDeleteItem, onThroughItem}){
   return (
     <div className="mb-5">
       <ul className='space-y-1 list-disc list-inside text-left'>
         {items.map((item) => 
-          <Item item={item} key={item.id} />
+          <Item item={item} key={item.id} onDeleteItem={onDeleteItem} onThroughItem={onThroughItem}/>
         )}
       </ul>
     </div>
@@ -141,12 +145,20 @@ export default function App() {
   function handleAddItem(item){
     setItems([...items, item]);
   }
+
+  function handleDeleteItem(id){
+    setItems((items) => items.filter((item) => item.id !== id));
+  }
+
+  function handleThroughItem(id){
+    setItems((items) => items.map((item) => (item.id === id ? {...item, checked: !item.checked } : item)))
+  }
   return (
 
     <div className="text-stone-100 text-2xl">
       <Header />
       <Form onAddItem={handleAddItem}/>
-      <List items={items}/>
+      <List items={items} onDeleteItem={handleDeleteItem} onThroughItem={handleThroughItem}/>
       <Option />
       <Footer />
       <Abdi />
