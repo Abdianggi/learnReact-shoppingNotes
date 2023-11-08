@@ -4,7 +4,7 @@ export default function Item({item, onDeleteItem, onThroughItem}){
   return (
     <li key={item.id} className={clsx(
       item.checked ? 'line-through' : '',
-      'mx-'
+      'mx-2'
     )}>
       <input type="checkbox" className='me-3' onChange={() => onThroughItem(item.id)} checked={item.checked} />
       <span className='me-3'>{item.quantity} {item.name}</span>

@@ -13,20 +13,25 @@ export default function AddGuest(){
     };
 
     function submitForm(e) {
-        console.log(data);
         e.preventDefault();
-        axios.post("http://localhost:8000/guest", { data }).
+        axios.post("http://localhost:8000/api/guest", data).
+        
         then(function (res) {
-            console.log(res);
+            if (!res.data.status) {
+               alert(res.data.message);
+            }else {
+                alert(res.data.message);
+                navigate('/');
+            }
             console.log(res.data);
         })
-        .then(navigate("/add"));
+        // .then(navigate("/"));
     }
     return (
         <>
             <div className="w-screen h-full flex flex-col justify-center items-center mt-16">
-                <h2 className="text-2xl font-bold">Add Guest</h2>
-                <form className="w-[50%] h-full flex flex-col mt-2">
+                <h2 className="text-2xl font-bold text-neutral-600">Add Guest</h2>
+                <form className="w-[50%] h-full flex flex-col mt-2" encType="multiple/form-data">
                     <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}

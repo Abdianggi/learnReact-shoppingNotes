@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import React from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import clsx from "clsx";
 
 export default function Home() {
   const [guests, setGuests] = useState([]);
@@ -17,10 +19,23 @@ export default function Home() {
     loadGuests();
   }, []);
 
+  function deleteGuest(id) {
+    axios.delete(`http://localhost:8000/api/guest/${id}`)
+    .then(function(res){
+      // this.addClass('animate-ping');
+      if (res.data.status) {
+        loadGuests();
+        alert(res.data.message);
+      }else{
+        alert(res.data.message);
+      }
+    });
+  }
+
   return (
-    <>
-      <div className="w-[100vw] h-full justify-center items-center flex flex-col px-10 py-8 mt-8">
-        <h1 className="text-3xl font-bold">DATA TABLE</h1>
+    <div className="h-screen flex-1 p-7">
+      <div className="justify-center items-center flex flex-col px-10 py-8 mt-8">
+        <h1 className="text-3xl font-bold text-neutral-600">DATA TABLE</h1>
         <div className="flex flex-col">
           <div className="overflow-x-auto mt-8 sm:-mx-6 items-center lg:-mx-8">
             <div className="py-4 inline-block min-w-full sm:px-6 lg:px-8">
@@ -33,11 +48,12 @@ export default function Home() {
                       <th scope="col" className="text-sm font-medium text-white px-6 py-4">
                         Whatapps
                       </th>
+                      <th scope="col" className="text-sm font-medium text-white px-6 py-4">Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     {guests.map((item, index) => 
-                      <tr id={item.id+''+index} key={item.id+item.created_at} className="bg-white border-b-2 border-black">
+                      <tr id={item.id+''+index} key={item.id+''+index} className="bg-white border-b-2 border-black">
                         <td className="text-xl text-gray-900 font-semibold px-6 py-4 whitespace-nowrap">
                           {index+1}
                         </td>
@@ -46,6 +62,17 @@ export default function Home() {
                         </td>
                         <td className="text-xl text-gray-900 font-semibold px-6 py-4 whitespace-nowrap">
                           {item.wa}
+                        </td>
+                        <td>
+                          <Link
+                            // onClick={()=>deleteGuest(item.id)}
+                            onClick={() => deleteGuest(item.id)}
+                            className={clsx(
+                              "bg-red-600 text-white px-6 py-2 rounded-lg",
+                            )}
+                          >
+                            Delete
+                          </Link>
                         </td>
                       </tr>
                     )}
@@ -56,6 +83,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

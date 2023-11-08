@@ -88,11 +88,12 @@ export default function App() {
   
   return (
 
-    <div className="text-stone-100 text-2xl">
+    <div className="flex">
       <Nav/>
       <Routes>
-        <Route path='/' element={ <Home/> } />
+        <Route path='/crud' element={ <Home/> } />
         <Route path='/add' element={ <AddGuest/> } />
+        <Route path='/grocery' element={ <Form/> }/>
       </Routes>
       {/* <Home /> */}
       {/* <Form onAddItem={handleAddItem}/>
