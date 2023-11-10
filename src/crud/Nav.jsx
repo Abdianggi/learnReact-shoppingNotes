@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export default function Nav(){
     const [open, setOpen] = useState(true);
     const Menus = [
-      { title: "Dashboard", src: "navIcons/Chart_fill", to:"home"},
+      { title: "Dashboard", src: "navIcons/Chart_fill", to:"/", isActive:window.location.pathname == '/'},
       { title: "Add Guest", src: "navIcons/Chat", to:"/add"},
       { title: "Accounts", src: "navIcons/User", to:"/crud", gap: true },
       { title: "Schedule ", src: "navIcons/Calendar" },
@@ -15,13 +15,13 @@ export default function Nav(){
       { title: "Setting", src: "navIcons/Setting" },
     ];
 
+    function test(){
+        console.log(Menus);
+    };
+    test();
     return (
         <>
-            {/* <div className="w-ful h-16 flex items-center px-14 justify-between bg-teal-600">
-                <Link to={"/crud"} className="text-3xl text-teal-200 font-semibold font-Montesarrat">CRUD</Link>
-                <Link to={"/add"} className="hover:bg-teal-600
-                hover:border-2 hover:border-white hover:text-teal-200 hover:shadow-md rounded-lg bg-white font-bold text-black py-2 px-2">Add Users</Link>
-            </div> */}
+  
 
                 <div className={` ${ open ? "w-72" : "w-20 " } bg-neutral-900 h-screen p-5 pt-8 relative duration-300`}>
                     <img src="./src/assets/navIcons/control.png" className={`absolute cursor-pointer -right-3 top-9 w-7 border-neutral-900
@@ -38,7 +38,7 @@ export default function Nav(){
                         {Menus.map((Menu, index) => (
                             <Link to={Menu.to}>
                                 <li key={index} className={`flex rounded-md p-2 cursor-pointer hover:bg-neutral-600 hover:text-neutral-900 text-gray-300 text-sm
-                                    items-center gap-x-4 ${Menu.gap ? "mt-9" : "mt-2" } ${ index===0 && "bg-neutral-700" } `}>
+                                    items-center gap-x-4 ${Menu.gap ? "mt-9" : "mt-2" } ${ Menu.isActive && "bg-neutral-700" } `}>
                                     <img src={`./src/assets/${Menu.src}.png`} />
                                     <span className={`${!open && "hidden" } origin-left duration-200`}>
                                         {Menu.title}
